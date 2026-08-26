@@ -83,7 +83,7 @@ class NowPlayingScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.2),
                   Row(
                     children: [
                       Expanded(

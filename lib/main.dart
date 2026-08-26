@@ -4,10 +4,13 @@ import 'package:choira_music_player/Providers/track_provider.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FastCachedImageConfig.init();
+  await dotenv.load(fileName: 'secret.env');
   runApp(
     MultiProvider(
       providers: [

@@ -4,6 +4,7 @@ import 'package:choira_music_player/Models/track.dart';
 import 'package:choira_music_player/Utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class TrackProvider extends ChangeNotifier {
   List<Tracks> tracks = [];
@@ -16,9 +17,10 @@ class TrackProvider extends ChangeNotifier {
 
   static const int _pageSize = 25;
 
-  String get _clientId => const String.fromEnvironment('JAMENDO_CLIENT_ID');
+  String get _clientId => dotenv.env['JAMENDO_CLIENT_ID'] ?? '';
 
   Future<void> fetchTracks({bool loadMore = false}) async {
+    debugPrint('Client ID: $_clientId');
     if (isLoading || (!hasMore && loadMore)) return;
 
     if (!loadMore) {
@@ -50,59 +52,20 @@ class TrackProvider extends ChangeNotifier {
             .whereType<Map<String, dynamic>>()
             .map(Tracks.fromJson)
             .toList();
-
         tracks.addAll(fetchedTracks);
         offset += fetchedTracks.length;
         hasMore = fetchedTracks.length == _pageSize;
         isShowingCachedData = false;
-
-        if (!loadMore) {
-          await _cacheTracks();
-        }
       } else {
         hasError = true;
         debugPrint('Failed to load tracks: ${response.statusCode}');
-        if (tracks.isEmpty) {
-          await _loadCachedTracks();
-        }
       }
     } catch (error) {
       hasError = true;
       debugPrint('Error fetching tracks: $error');
-      if (tracks.isEmpty) {
-        await _loadCachedTracks(); // offline fallback
-      }
     } finally {
       isLoading = false;
       notifyListeners();
-    }
-  }
-
-  Future<void> _cacheTracks() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final jsonList = tracks.map((t) => t.toJson()).toList();
-      await prefs.setString('cached_tracks', jsonEncode(jsonList));
-    } catch (e) {
-      debugPrint('Cache save error: $e');
-    }
-  }
-
-  Future<void> _loadCachedTracks() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final cached = prefs.getString('cached_tracks');
-      if (cached != null) {
-        final jsonList = jsonDecode(cached) as List<dynamic>;
-        tracks = jsonList
-            .whereType<Map<String, dynamic>>()
-            .map(Tracks.fromJson)
-            .toList();
-        hasMore = false;
-        isShowingCachedData = true;
-      }
-    } catch (e) {
-      debugPrint('Cache load error: $e');
     }
   }
 
@@ -136,6 +99,7 @@ class TrackProvider extends ChangeNotifier {
             .map(Tracks.fromJson)
             .toList();
 
+        print('Fetched ${fetchedTracks.length} tracks from API');
         tracks = fetchedTracks;
         offset = fetchedTracks.length;
         hasMore = fetchedTracks.length == _pageSize;

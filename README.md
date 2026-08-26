@@ -24,7 +24,7 @@ A Flutter music player app built for the Choira Flutter Developer assessment, us
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/<your-username>/choira-music-player.git
+   git clone https://github.com/mohak852/MusicApp.git
    cd choira-music-player
    ```
 

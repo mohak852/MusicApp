@@ -157,18 +157,6 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
 
-        if (trackProvider.isShowingCachedData) {
-          return Container(
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            color: AppColors.surfaceElevated,
-            child: const Text(
-              'Showing saved tracks — offline',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
-            ),
-          );
-        }
-
         if (trackProvider.hasError) {
           return MessageState(
             icon: Icons.wifi_off_rounded,

@@ -56,8 +56,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 return IconButton(
                   icon: const Icon(Icons.search, color: AppColors.textFaint),
                   onPressed: () {
-                    print('Clearing search results');
-                    print(widget.controller.text);
                     trackProvider.searchTracks(widget.controller.text);
                   },
                 );

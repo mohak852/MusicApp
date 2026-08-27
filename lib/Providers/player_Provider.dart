@@ -42,7 +42,6 @@ class PlayerProvider extends ChangeNotifier {
       await _player.setUrl(tracks.audioUrl);
       await _player.play();
     } catch (e) {
-      debugPrint('Playback error: $e');
     }
     notifyListeners();
   }

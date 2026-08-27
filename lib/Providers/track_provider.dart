@@ -19,7 +19,6 @@ class TrackProvider extends ChangeNotifier {
   String get _clientId => dotenv.env['JAMENDO_CLIENT_ID'] ?? '';
 
   Future<void> fetchTracks({bool loadMore = false}) async {
-    debugPrint('Client ID: $_clientId');
     if (isLoading || (!hasMore && loadMore)) return;
 
     if (!loadMore) {
@@ -56,11 +55,9 @@ class TrackProvider extends ChangeNotifier {
         hasMore = fetchedTracks.length == _pageSize;
       } else {
         hasError = true;
-        debugPrint('Failed to load tracks: ${response.statusCode}');
       }
     } catch (error) {
       hasError = true;
-      debugPrint('Error fetching tracks: $error');
     } finally {
       isLoading = false;
       notifyListeners();
@@ -96,18 +93,14 @@ class TrackProvider extends ChangeNotifier {
             .whereType<Map<String, dynamic>>()
             .map(Tracks.fromJson)
             .toList();
-
-        print('Fetched ${fetchedTracks.length} tracks from API');
         tracks = fetchedTracks;
         offset = fetchedTracks.length;
         hasMore = fetchedTracks.length == _pageSize;
       } else {
         hasError = true;
-        debugPrint('Failed to search tracks: ${response.statusCode}');
       }
     } catch (error) {
       hasError = true;
-      debugPrint('Error searching tracks: $error');
     } finally {
       isLoading = false;
       notifyListeners();

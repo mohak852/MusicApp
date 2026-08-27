@@ -4,6 +4,7 @@ import 'package:just_audio/just_audio.dart';
 
 
 class PlayerProvider extends ChangeNotifier {
+  
   final AudioPlayer _player = AudioPlayer();
 
   List<Tracks> _queue = [];
@@ -35,10 +36,10 @@ class PlayerProvider extends ChangeNotifier {
     _queue = queue;
     _currentIndex = index;
     // ignore: non_constant_identifier_names
-    final Tracks = _queue[index];
+    final tracks = _queue[index];
 
     try {
-      await _player.setUrl(Tracks.audioUrl);
+      await _player.setUrl(tracks.audioUrl);
       await _player.play();
     } catch (e) {
       debugPrint('Playback error: $e');

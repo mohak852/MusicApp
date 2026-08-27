@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:choira_music_player/Models/track.dart';
 import 'package:choira_music_player/Utils/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,7 @@ class TrackProvider extends ChangeNotifier {
   bool hasMore = true;
   bool hasError = false;
   String query = '';
-  bool isShowingCachedData = false;
+  
 
   static const int _pageSize = 25;
 
@@ -55,7 +54,6 @@ class TrackProvider extends ChangeNotifier {
         tracks.addAll(fetchedTracks);
         offset += fetchedTracks.length;
         hasMore = fetchedTracks.length == _pageSize;
-        isShowingCachedData = false;
       } else {
         hasError = true;
         debugPrint('Failed to load tracks: ${response.statusCode}');

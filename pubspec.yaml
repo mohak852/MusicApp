@@ -39,7 +39,6 @@ dependencies:
   just_audio:
   fast_cached_network_image:
   flutter_dotenv:
-  shared_preferences:
 
 dev_dependencies:
   flutter_test:

@@ -4,7 +4,7 @@ class Tracks {
   final String artistName;
   final String albumImage;
   final String audioUrl;
-  final int duration; // seconds
+  final int duration;
 
   Tracks({
     required this.id,

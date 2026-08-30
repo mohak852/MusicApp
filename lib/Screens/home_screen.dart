@@ -3,10 +3,10 @@ import 'package:choira_music_player/Providers/player_Provider.dart';
 import 'package:choira_music_player/Screens/now_playing_screen.dart';
 import 'package:choira_music_player/Providers/track_provider.dart';
 import 'package:choira_music_player/Utils/app_theme.dart';
-import 'package:choira_music_player/Utils/message.dart';
 import 'package:choira_music_player/Widgets/mini_player.dart';
 import 'package:choira_music_player/Widgets/search_bar.dart';
-import 'package:choira_music_player/Widgets/track_list_item.dart';
+import 'package:choira_music_player/Widgets/track_grid_view.dart';
+import 'package:choira_music_player/Widgets/track_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -107,9 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: SearchBarWidget(
                         controller: _searchController,
-                        onChanged: (query) {
-                          // TrackProvider.search(query)
-                        },
+                        onChanged: (query) {},
                       ),
                     ),
                   ),
@@ -145,91 +143,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBody(bool isWide) {
-    return isWide ? _buildGrid() : _buildList();
-  }
-
-  Widget _buildList() {
-    return Consumer2<TrackProvider, PlayerProvider>(
-      builder: (context, trackProvider, playerProvider, _) {
-        if (trackProvider.isLoading && trackProvider.tracks.isEmpty) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.accent),
+    return isWide
+        ? TrackGridView(
+            scrollController: _scrollController,
+            onOpenNowPlaying: _openNowPlaying,
+          )
+        : TrackListView(
+            scrollController: _scrollController,
+            onOpenNowPlaying: _openNowPlaying,
           );
-        }
-
-        if (trackProvider.hasError) {
-          return MessageState(
-            icon: Icons.wifi_off_rounded,
-            title: 'Couldn\'t load tracks',
-            subtitle: 'Check your connection and try again.',
-            actionLabel: 'Retry',
-            onAction: () => context.read<TrackProvider>().fetchTracks(),
-          );
-        }
-
-        if (trackProvider.tracks.isEmpty) {
-          return const MessageState(
-            icon: Icons.search_off_rounded,
-            title: 'No results',
-            subtitle: 'Try a different search term.',
-          );
-        }
-
-        final activeId = playerProvider.currentTracks?.id;
-        return ListView.builder(
-          controller: _scrollController,
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
-          itemCount: trackProvider.tracks.length,
-          itemBuilder: (context, index) {
-            final track = trackProvider.tracks[index];
-            return TrackListItem(
-              track: track,
-              isActive: track.id == activeId,
-              onTap: () {
-                context.read<PlayerProvider>().playTracks(
-                  trackProvider.tracks,
-                  index,
-                );
-                _openNowPlaying(track);
-              },
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildGrid() {
-    return Consumer2<TrackProvider, PlayerProvider>(
-      builder: (context, trackProvider, playerProvider, _) {
-        final activeId = playerProvider.currentTracks?.id;
-
-        return GridView.builder(
-          controller: _scrollController,
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 420,
-            mainAxisExtent: 72,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 4,
-          ),
-          itemCount: trackProvider.tracks.length,
-          itemBuilder: (context, index) {
-            final track = trackProvider.tracks[index];
-            return TrackListItem(
-              track: track,
-              isActive: track.id == activeId,
-              onTap: () {
-                context.read<PlayerProvider>().playTracks(
-                  trackProvider.tracks,
-                  index,
-                );
-                _openNowPlaying(track);
-              },
-            );
-          },
-        );
-      },
-    );
   }
 }

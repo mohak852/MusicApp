@@ -4,7 +4,7 @@ class AppColors {
   static const bg = Color(0xFF0E0E12);
   static const surface = Color(0xFF17171D);
   static const surfaceElevated = Color(0xFF1F1F27);
-  static const accent = Color(0xFFF5C24D); // gold, echoes the logo's 'o'
+  static const accent = Color(0xFFF5C24D);
   static const accentSoft = Color(0xFF3A3320);
   static const textPrimary = Color(0xFFF5F5F7);
   static const textSecondary = Color(0xFF9A9AA5);

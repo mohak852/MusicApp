@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class MiniPlayer extends StatelessWidget {
   final Tracks track;
   final bool isPlaying;
-  final double progress; // 0.0 - 1.0
+  final double progress;
   final VoidCallback onPlayPause;
   final VoidCallback onTap;
 

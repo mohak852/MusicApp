@@ -21,13 +21,12 @@ class PlayerProvider extends ChangeNotifier {
   bool get hasPrevious => _currentIndex > 0;
 
   PlayerProvider() {
-    // just_audio streams -> notifyListeners so widgets rebuild automatically
     _player.positionStream.listen((_) => notifyListeners());
     _player.durationStream.listen((_) => notifyListeners());
     _player.playerStateStream.listen((state) {
       notifyListeners();
       if (state.processingState == ProcessingState.completed) {
-        next(); // auto-advance when a Tracks finishes
+        next(); 
       }
     });
   }
